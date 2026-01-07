@@ -4,20 +4,26 @@
 
 #include <algorithm>
 
+void FindFiles::SetPath(const std::string& thePath) {
+	path = thePath;
+}
+
 bool FindFiles::Find()
 {
 	files.clear();
 
+	/* Could be used to get current directory if needed
 	char cwd[MAX_PATH];
 	DWORD len = GetCurrentDirectoryA(MAX_PATH, cwd);
 	if (len == 0 || len > MAX_PATH)
 		return false;
 
 	std::string dir(cwd);
+	*/
 
 	for (auto pattern : patterns)
 	{
-		std::string search = dir + pattern;
+		std::string search = path + pattern;
 		WIN32_FIND_DATAA fd;
 		HANDLE hFind = FindFirstFileA(search.c_str(), &fd);
 		if (hFind == INVALID_HANDLE_VALUE)
@@ -27,7 +33,7 @@ bool FindFiles::Find()
 		{
 			if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 			{
-				files.push_back(dir + "\\" + fd.cFileName);
+				files.push_back(fd.cFileName);
 			}
 		} while (FindNextFileA(hFind, &fd));
 

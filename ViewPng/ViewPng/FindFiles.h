@@ -6,7 +6,8 @@
 class FindFiles
 {
 public:
-	void addPattern(const std::string& pattern) { patterns.push_back(pattern); }
+	void SetPath(const std::string& path);
+	void AddPattern(const std::string& pattern) { patterns.push_back(pattern); }
 	bool Find();
 	std::vector<std::string> GetFiles() const { return files; }
 	void ClearFiles() { files.clear(); }
@@ -14,5 +15,6 @@ public:
 private:
 	std::vector<std::string> files;
 	std::vector<std::string> patterns;
+	std::string path = ".\\";
 };
 

@@ -14,7 +14,7 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
-const char* VERSION = "1.0.0";
+const char* VERSION = "1.0.2";
 FindFiles findFiles;
 
 // Forward declarations of functions included in this code module:
@@ -33,8 +33,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     // TODO: Place code here.
     Log::LogMessage("%s\n", VERSION);
-    findFiles.addPattern("\\*.png");
-    findFiles.addPattern("\\*.PNG");
+    findFiles.SetPath(".\\");
+    findFiles.AddPattern("\\*.png");
+    findFiles.AddPattern("\\*.PNG");
     if(findFiles.Find())
 	{
 		auto files = findFiles.GetFiles();
