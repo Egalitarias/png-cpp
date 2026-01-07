@@ -44,5 +44,7 @@ private:
 	int pngChannels;
 	unsigned char* imageData;
 	int imgaeDataIndex;
+
+	void SwapRedBlue(unsigned char* imageData, int pixels);
 };
 

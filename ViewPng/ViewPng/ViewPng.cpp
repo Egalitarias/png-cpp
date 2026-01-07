@@ -17,7 +17,7 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
-const char* VERSION = "1.0.6";
+const char* VERSION = "1.0.7";
 FindFiles findFiles;
 std::string pngFilePath;
 PngFile pngFile;

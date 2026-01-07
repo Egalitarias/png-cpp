@@ -111,6 +111,9 @@ void PngFile::DrawImage(HDC hdc, const char* filePath) {
 		Log::LogMessage("Failed to load image data from file: [%s]\n", filePath);
 		return;
 	}
+
+	SwapRedBlue(imageData, width * height);
+
 	BITMAPINFO bmi;
 	ZeroMemory(&bmi, sizeof(BITMAPINFO));
 	bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
@@ -130,4 +133,14 @@ void PngFile::DrawImage(HDC hdc, const char* filePath) {
 		DIB_RGB_COLORS
 	);
 	stbi_image_free(imageData);
+}
+
+void PngFile::SwapRedBlue(unsigned char* imageData, int pixels) {
+	for (int i = 0; i < pixels; ++i) {
+		unsigned char* p = imageData + i * 4;
+		unsigned char tmp = p[0]; // R
+		p[0] = p[2];             // B -> position 0
+		p[2] = tmp;              // R -> position 2
+		// keep G (p[1]) and A (p[3]) as-is
+	}
 }
