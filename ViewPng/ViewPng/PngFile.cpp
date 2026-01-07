@@ -1,4 +1,8 @@
 #include <winsock.h>
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+#include "Log.h"
 
 #include "PngFile.h"
 
@@ -68,27 +72,62 @@ PngColor PngFile::GetColorAt(int x, int y)
 }
 
 bool PngFile::StartReadingColors() {
-	fopen_s(&in, filePath.c_str(), "rb");
-	if (in) {
-		fseek(in, 16, SEEK_SET);
-	}
+	imageData = stbi_load(filePath.c_str(), &pngWidth, &pngHeight, &pngChannels, 0);
+	imgaeDataIndex = 0;
 
-	return in != nullptr;
+	return imageData != nullptr;
 }
 
 PngColor PngFile::NextColor() {
 	PngColor pngColor;
 
-	if (in) {
-		fread(&pngColor.r, sizeof(unsigned char), 1, in);
-		fread(&pngColor.g, sizeof(unsigned char), 1, in);
-		fread(&pngColor.b, sizeof(unsigned char), 1, in);
-		fread(&pngColor.a, sizeof(unsigned char), 1, in);
+	pngColor.r = imageData[imgaeDataIndex++];
+	pngColor.g = imageData[imgaeDataIndex++];
+	pngColor.b = imageData[imgaeDataIndex++];
+	if (pngChannels >= 4) {
+		pngColor.a = imageData[imgaeDataIndex++];
+	} else {
+		pngColor.a = 255;
 	}
 
 	return pngColor;
 }
 
 void PngFile::EndReadingColors() {
-	fclose(in);
+	stbi_image_free(imageData);
+	imageData = nullptr;
+	imgaeDataIndex = 0;
+}
+
+void PngFile::DrawImage(HDC hdc, const char* filePath) {
+	if (filePath == nullptr || strlen(filePath) == 0) {
+		return;
+	}
+	int width = 0;
+	int height = 0;
+	int channels = 0;
+	unsigned char* imageData = stbi_load(filePath, &width, &height, &channels, STBI_rgb_alpha);
+	if (imageData == nullptr) {
+		Log::LogMessage("Failed to load image data from file: [%s]\n", filePath);
+		return;
+	}
+	BITMAPINFO bmi;
+	ZeroMemory(&bmi, sizeof(BITMAPINFO));
+	bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	bmi.bmiHeader.biWidth = width;
+	bmi.bmiHeader.biHeight = -height; // Negative height to indicate top-down bitmap
+	bmi.bmiHeader.biPlanes = 1;
+	bmi.bmiHeader.biBitCount = 32; // 4 bytes per pixel (RGBA)
+	bmi.bmiHeader.biCompression = BI_RGB;
+	SetDIBitsToDevice(
+		hdc,
+		0, 0,
+		width, height,
+		0, 0,
+		0, height,
+		imageData,
+		&bmi,
+		DIB_RGB_COLORS
+	);
+	stbi_image_free(imageData);
 }

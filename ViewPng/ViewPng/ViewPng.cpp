@@ -159,8 +159,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
-void DrawImage(HDC hdc, const char* filePath) {
-}
 
 //
 //  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
@@ -198,7 +196,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: Add any drawing code that uses hdc here...
-			DrawImage(hdc, pngFilePath.c_str());
+			pngFile.DrawImage(hdc, pngFilePath.c_str());
 
             EndPaint(hWnd, &ps);
         }

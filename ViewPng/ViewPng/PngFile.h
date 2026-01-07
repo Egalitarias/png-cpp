@@ -34,11 +34,15 @@ public:
 	PngColor NextColor();
 	void EndReadingColors();
 
+	void DrawImage(HDC hdc, const char* filePath);
+
 private:
 	FILE* in;
 	std::string filePath;
 	int pngWidth;
 	int pngHeight;
-
+	int pngChannels;
+	unsigned char* imageData;
+	int imgaeDataIndex;
 };
 
