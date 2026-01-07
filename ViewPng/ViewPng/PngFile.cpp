@@ -60,3 +60,35 @@ bool PngFile::ReadDimensions()
 	
 	return true;
 }
+PngColor PngFile::GetColorAt(int x, int y)
+{
+	PngColor color = { 0, 0, 0, 255 };
+	// Placeholder implementation
+	return color;
+}
+
+bool PngFile::StartReadingColors() {
+	fopen_s(&in, filePath.c_str(), "rb");
+	if (in) {
+		fseek(in, 16, SEEK_SET);
+	}
+
+	return in != nullptr;
+}
+
+PngColor PngFile::NextColor() {
+	PngColor pngColor;
+
+	if (in) {
+		fread(&pngColor.r, sizeof(unsigned char), 1, in);
+		fread(&pngColor.g, sizeof(unsigned char), 1, in);
+		fread(&pngColor.b, sizeof(unsigned char), 1, in);
+		fread(&pngColor.a, sizeof(unsigned char), 1, in);
+	}
+
+	return pngColor;
+}
+
+void PngFile::EndReadingColors() {
+	fclose(in);
+}

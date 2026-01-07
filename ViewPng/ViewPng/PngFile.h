@@ -13,6 +13,13 @@ struct PngIHDRChunk
 	unsigned char interlaceMethod;
 };	
 
+struct PngColor {
+	unsigned char r;
+	unsigned char g;
+	unsigned char b;
+	unsigned char a;
+};
+
 class PngFile
 {
 public:
@@ -21,8 +28,14 @@ public:
 	PngIHDRChunk ReadIHDRChunk();
 	int width() const { return pngWidth; }
 	int height() const { return pngHeight; }
+	PngColor GetColorAt(int x, int y);
+
+	bool StartReadingColors();
+	PngColor NextColor();
+	void EndReadingColors();
 
 private:
+	FILE* in;
 	std::string filePath;
 	int pngWidth;
 	int pngHeight;
