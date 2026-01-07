@@ -17,10 +17,11 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
-const char* VERSION = "1.0.4";
+const char* VERSION = "1.0.6";
 FindFiles findFiles;
 std::string pngFilePath;
 PngFile pngFile;
+PngIHDRChunk pngIHDRChunk;
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -59,6 +60,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             } else {
                 Log::LogMessage("Failed to read PNG dimensions.\n");
             }
+
+			pngIHDRChunk = pngFile.ReadIHDRChunk();
+			Log::LogMessage("IHDR Chunk - Width: %u\n", pngIHDRChunk.width);
+			Log::LogMessage("IHDR Chunk - Height: %u\n", pngIHDRChunk.height);
+			Log::LogMessage("IHDR Chunk - Bit Depth: %u\n", pngIHDRChunk.bitDepth);
+			Log::LogMessage("IHDR Chunk - Color Type: %u\n", pngIHDRChunk.colorType);
+			Log::LogMessage("IHDR Chunk - Compression Method: %u\n", pngIHDRChunk.compressionMethod);
+			Log::LogMessage("IHDR Chunk - Filter Method: %u\n", pngIHDRChunk.filterMethod);
+			Log::LogMessage("IHDR Chunk - Interlace Method: %u\n", pngIHDRChunk.interlaceMethod);
         }
     }
     else {

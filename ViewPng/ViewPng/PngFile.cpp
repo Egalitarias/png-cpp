@@ -7,6 +7,38 @@ void PngFile::SetFilePath(const char* theFilePath)
 	filePath = theFilePath;
 }
 
+PngIHDRChunk PngFile::ReadIHDRChunk() {
+	PngIHDRChunk chunk;
+	chunk.width = 0;
+	chunk.height = 0;
+	char chunkType[5] = { 0 };
+
+	FILE* in;
+	fopen_s(&in, filePath.c_str(), "rb");
+	if (!in) {
+		return chunk;
+	}
+	fseek(in, 12, SEEK_SET);
+	fread(chunkType, 1, 4, in);
+	chunkType[4] = '\0';
+	if (strcmp(chunkType, "IHDR") != 0) {
+		fclose(in);
+		return chunk;
+	}
+	fseek(in, 16, SEEK_SET);
+	fread(&chunk.width, sizeof(unsigned int), 1, in);
+	fread(&chunk.height, sizeof(unsigned int), 1, in);
+	fread(&chunk.bitDepth, 1, 1, in);
+	fread(&chunk.colorType, 1, 1, in);
+	fread(&chunk.compressionMethod, 1, 1, in);
+	fread(&chunk.filterMethod, 1, 1, in);
+	fread(&chunk.interlaceMethod, 1, 1, in);
+	fclose(in);
+	chunk.width = ntohl(chunk.width);
+	chunk.height = ntohl(chunk.height);
+	return chunk;
+}
+
 bool PngFile::ReadDimensions()
 {
 	FILE* in;
