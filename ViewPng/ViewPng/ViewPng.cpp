@@ -6,6 +6,7 @@
 
 #include "Log.h"
 #include "FindFiles.h"
+#include "PngFile.h"
 
 #define MAX_LOADSTRING 100
 
@@ -14,8 +15,10 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
-const char* VERSION = "1.0.2";
+const char* VERSION = "1.0.3";
 FindFiles findFiles;
+std::string pngFilePath;
+PngFile pngFile;
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -41,8 +44,20 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		auto files = findFiles.GetFiles();
         for (const auto& file : files)
         {
-			Log::LogMessage("Found file: %s\n", file.c_str());
+			Log::LogMessage("Found file: [%s]\n", file.c_str());
 		}
+
+        if (files.size() >= 1) {
+            pngFilePath = files[0];
+            Log::LogMessage("First PNG file path: [%s]\n", pngFilePath.c_str());
+			pngFile.SetFilePath(pngFilePath.c_str());
+            if (pngFile.ReadDimensions()) {
+                Log::LogMessage("PNG dimensions read successfully.\n");
+				Log::LogMessage("Width: %d, Height: %d\n", pngFile.width(), pngFile.height());
+            } else {
+                Log::LogMessage("Failed to read PNG dimensions.\n");
+            }
+        }
     }
     else {
 		Log::LogMessage("No files found.\n");
@@ -132,6 +147,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
+void DrawImage(HDC hdc, const char* filePath) {
+}
+
 //
 //  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -168,6 +186,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: Add any drawing code that uses hdc here...
+			DrawImage(hdc, pngFilePath.c_str());
+
             EndPaint(hWnd, &ps);
         }
         break;
