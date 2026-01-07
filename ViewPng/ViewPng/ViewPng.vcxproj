@@ -123,12 +123,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FindFiles.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Log.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="ViewPng.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FindFiles.cpp" />
     <ClCompile Include="ViewPng.cpp" />
   </ItemGroup>
   <ItemGroup>

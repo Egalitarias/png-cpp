@@ -4,12 +4,17 @@
 #include "framework.h"
 #include "ViewPng.h"
 
+#include "Log.h"
+#include "FindFiles.h"
+
 #define MAX_LOADSTRING 100
 
 // Global Variables:
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
+
+FindFiles findFiles;
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -26,6 +31,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: Place code here.
+	if(findFiles.Find())
+	{
+		auto files = findFiles.GetFiles();
+        for (const auto& file : files)
+        {
+			Log::LogMessage("Found file: %s\n", file.c_str());
+		}
+
+    }
+    else {
+		Log::LogMessage("No files found.\n");
+    }
 
     // Initialize global strings
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);

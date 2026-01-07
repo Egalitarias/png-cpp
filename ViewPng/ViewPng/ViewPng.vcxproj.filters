@@ -27,9 +27,18 @@
     <ClInclude Include="ViewPng.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FindFiles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ViewPng.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FindFiles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
