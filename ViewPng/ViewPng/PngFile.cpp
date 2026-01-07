@@ -1,3 +1,5 @@
+#include <winsock.h>
+
 #include "PngFile.h"
 
 void PngFile::SetFilePath(const char* theFilePath)
@@ -15,8 +17,12 @@ bool PngFile::ReadDimensions()
 
 
 	fseek(in, 16, SEEK_SET);
+	size_t j = sizeof(int);
 	fread(&pngWidth, sizeof(int), 1, in);
 	fread(&pngHeight, sizeof(int), 1, in);
+
+	pngWidth = ntohl(pngWidth);
+	pngHeight = ntohl(pngHeight);
 
 	fclose(in);
 	

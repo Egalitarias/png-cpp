@@ -1,6 +1,8 @@
 // ViewPng.cpp : Defines the entry point for the application.
 //
 
+#pragma comment(lib, "Ws2_32.lib")
+
 #include "framework.h"
 #include "ViewPng.h"
 
@@ -15,7 +17,7 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
-const char* VERSION = "1.0.3";
+const char* VERSION = "1.0.4";
 FindFiles findFiles;
 std::string pngFilePath;
 PngFile pngFile;
