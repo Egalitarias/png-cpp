@@ -15,11 +15,9 @@ bool FindFiles::Find()
 
 	std::string dir(cwd);
 
-	const char* patterns[] = { "\\*.png", "\\*.PNG" };
-
-	for (const char* pat : patterns)
+	for (auto pattern : patterns)
 	{
-		std::string search = dir + pat;
+		std::string search = dir + pattern;
 		WIN32_FIND_DATAA fd;
 		HANDLE hFind = FindFirstFileA(search.c_str(), &fd);
 		if (hFind == INVALID_HANDLE_VALUE)
